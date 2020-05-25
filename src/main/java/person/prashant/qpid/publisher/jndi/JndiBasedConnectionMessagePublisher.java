@@ -13,6 +13,7 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import java.util.Arrays;
 
 public class JndiBasedConnectionMessagePublisher implements OurMessagePublisher {
     private static final int DELIVERY_MODE = DeliveryMode.NON_PERSISTENT;
@@ -36,9 +37,16 @@ public class JndiBasedConnectionMessagePublisher implements OurMessagePublisher 
     }
 
     @Override
-    public void publish(final String message) throws JMSException {
-        TextMessage textMessage = session.createTextMessage(message);
-        this.messageProducer.send(textMessage, DELIVERY_MODE, Message.DEFAULT_PRIORITY, Message.DEFAULT_TIME_TO_LIVE);
+    public void publish(final String... messages) throws JMSException {
+        Arrays.asList(messages).forEach(message -> {
+            TextMessage textMessage = null;
+            try {
+                textMessage = session.createTextMessage(message);
+                this.messageProducer.send(textMessage, DELIVERY_MODE, Message.DEFAULT_PRIORITY, Message.DEFAULT_TIME_TO_LIVE);
+            } catch (JMSException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override

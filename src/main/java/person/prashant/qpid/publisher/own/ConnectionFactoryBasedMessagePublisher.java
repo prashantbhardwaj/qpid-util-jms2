@@ -2,13 +2,16 @@ package person.prashant.qpid.publisher.own;
 
 import javafx.util.Pair;
 import org.apache.qpid.jms.JmsConnectionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import person.prashant.qpid.publisher.DestinationResolver;
 import person.prashant.qpid.publisher.OurMessagePublisher;
 
 import javax.jms.*;
+import java.util.Arrays;
 
 public class ConnectionFactoryBasedMessagePublisher implements OurMessagePublisher {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionFactoryBasedMessagePublisher.class);
     private final ConnectionFactory connectionFactory;
     private DestinationResolver destinationResolver;
 
@@ -23,13 +26,19 @@ public class ConnectionFactoryBasedMessagePublisher implements OurMessagePublish
         };
     }
 
-    public void publish(String message) throws JMSException {
+    public void publish(String... messages) throws JMSException {
         try(JMSContext jmsContext = this.connectionFactory.createContext()) {
             JMSProducer jmsProducer = jmsContext.createProducer();
-            TextMessage jmsMessage = jmsContext.createTextMessage(message);
-            Destination destination = this.destinationResolver.resolve(jmsContext, jmsMessage).getKey();
-            jmsProducer.send(destination, jmsMessage);
+
+            Arrays.asList(messages).forEach(message -> {
+                TextMessage jmsMessage = jmsContext.createTextMessage(message);
+                Destination destination = this.destinationResolver.resolve(jmsContext, jmsMessage).getKey();
+                jmsProducer.send(destination, jmsMessage);
+                LOGGER.info("Message sent - {}", message);
+            });
+
             if (jmsContext.getTransacted()) {
+                LOGGER.info("Committing the message");
                 jmsContext.commit();
             }
         } catch (Exception exp){

@@ -12,6 +12,6 @@ public class Runner {
 
     public static void main(String[] args) throws Exception {
         OurMessagePublisher messagePublisher = new ConnectionFactoryBasedMessagePublisher(url, isTopic, topicOrQueueName);
-        new RandomStringMessageProducer(messagePublisher).publishFixedNumberOfMessages(1000);
+        new RandomStringMessageProducer(messagePublisher).keepPublishingMessagesAfterProvidedMilliSeconds(2);
     }
 }

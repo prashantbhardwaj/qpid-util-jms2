@@ -8,6 +8,6 @@ public class Runner {
 
     public static void main(String[] args) throws Exception {
         OurMessagePublisher messagePublisher = new JndiBasedConnectionMessagePublisher();
-        new RandomStringMessageProducer(messagePublisher).publishFixedNumberOfMessages(10000);
+        new RandomStringMessageProducer(messagePublisher).keepPublishingMessagesAfterProvidedMilliSeconds(2);
     }
 }
