@@ -9,6 +9,7 @@ import person.prashant.qpid.publisher.OurMessagePublisher;
 
 import javax.jms.*;
 import java.util.Arrays;
+import java.util.List;
 
 public class ConnectionFactoryBasedMessagePublisher implements OurMessagePublisher {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionFactoryBasedMessagePublisher.class);
@@ -26,11 +27,11 @@ public class ConnectionFactoryBasedMessagePublisher implements OurMessagePublish
         };
     }
 
-    public void publish(String... messages) throws JMSException {
+    public void publish(List<String> messages) throws JMSException {
         try(JMSContext jmsContext = this.connectionFactory.createContext()) {
             JMSProducer jmsProducer = jmsContext.createProducer();
 
-            Arrays.asList(messages).forEach(message -> {
+            messages.forEach(message -> {
                 TextMessage jmsMessage = jmsContext.createTextMessage(message);
                 Destination destination = this.destinationResolver.resolve(jmsContext, jmsMessage).getKey();
                 jmsProducer.send(destination, jmsMessage);

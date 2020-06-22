@@ -14,6 +14,7 @@ import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import java.util.Arrays;
+import java.util.List;
 
 public class JndiBasedConnectionMessagePublisher implements OurMessagePublisher {
     private static final int DELIVERY_MODE = DeliveryMode.NON_PERSISTENT;
@@ -36,9 +37,10 @@ public class JndiBasedConnectionMessagePublisher implements OurMessagePublisher 
         this.messageProducer = this.session.createProducer(queue);
     }
 
+
     @Override
-    public void publish(final String... messages) throws JMSException {
-        Arrays.asList(messages).forEach(message -> {
+    public void publish(List<String> messages) throws JMSException {
+        messages.forEach(message -> {
             TextMessage textMessage = null;
             try {
                 textMessage = session.createTextMessage(message);

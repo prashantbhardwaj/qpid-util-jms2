@@ -18,13 +18,22 @@ public class RandomStringMessageProducer implements OurMessageProducer {
         this.messagePublisher = messagePublisher;
     }
 
-    public void publishFixedNumberOfMessages(int messageCount) throws JMSException {
+    public void publishFixedNumberOfMessages(long messageCount) throws JMSException {
         LOGGER.info("Creating {} messages", messageCount);
         List<String> messages = new ArrayList<>();
         for(int i = 0; i < messageCount; i++){
             messages.add(UUID.randomUUID().toString());
         }
-        this.messagePublisher.publish(messages.toArray(new String [messageCount]));
+        this.messagePublisher.publish(messages);
+    }
+
+    public void publishFixedNumberOfMessagesButTakeABreaksInBetween(long messageCount, int breakAfter) throws JMSException {
+        LOGGER.info("Creating {} messages", messageCount);
+        List<String> messages = new ArrayList<>();
+        for(int i = 0; i < messageCount; i++){
+            messages.add(UUID.randomUUID().toString());
+        }
+        this.messagePublisher.publish();
     }
 
     public void keepPublishingMessagesAfterProvidedMilliSeconds(int timeGapInMillis) throws JMSException {

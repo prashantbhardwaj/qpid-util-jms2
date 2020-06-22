@@ -1,8 +1,13 @@
 package person.prashant.qpid.publisher;
 
 import javax.jms.JMSException;
+import java.util.Arrays;
+import java.util.List;
 
 public interface OurMessagePublisher {
-   public void publish(String... messages) throws JMSException;
-   public void close() throws JMSException;
+   default void publish(String... messages) throws JMSException{
+      this.publish(Arrays.asList(messages));
+   }
+   void publish(List<String> messages) throws JMSException;
+   void close() throws JMSException;
 }
