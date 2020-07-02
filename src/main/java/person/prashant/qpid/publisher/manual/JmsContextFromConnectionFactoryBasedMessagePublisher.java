@@ -1,4 +1,4 @@
-package person.prashant.qpid.publisher.own;
+package person.prashant.qpid.publisher.manual;
 
 import javafx.util.Pair;
 import org.apache.qpid.jms.JmsConnectionFactory;
@@ -8,15 +8,14 @@ import person.prashant.qpid.publisher.DestinationResolver;
 import person.prashant.qpid.publisher.OurMessagePublisher;
 
 import javax.jms.*;
-import java.util.Arrays;
 import java.util.List;
 
-public class ConnectionFactoryBasedMessagePublisher implements OurMessagePublisher {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionFactoryBasedMessagePublisher.class);
+public class JmsContextFromConnectionFactoryBasedMessagePublisher implements OurMessagePublisher {
+    private static final Logger LOGGER = LoggerFactory.getLogger(JmsContextFromConnectionFactoryBasedMessagePublisher.class);
     private final ConnectionFactory connectionFactory;
     private DestinationResolver destinationResolver;
 
-    public ConnectionFactoryBasedMessagePublisher(String url, boolean isTopic, final String destinationName) throws Exception {
+    public JmsContextFromConnectionFactoryBasedMessagePublisher(String url, boolean isTopic, final String destinationName) throws Exception {
         this.connectionFactory = new JmsConnectionFactory(url);
         this.destinationResolver = (jmsContext, msg) -> {
             if(isTopic) {

@@ -21,7 +21,7 @@
     </build>
 
     <properties>
-        <qpid-client.version>0.51.0</qpid-client.version>
+        <qpid-client.version>0.52.0</qpid-client.version>
     </properties>
 
     <dependencies>

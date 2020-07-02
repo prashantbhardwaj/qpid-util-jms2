@@ -2,7 +2,6 @@ package person.prashant.qpid.publisher.jndi;
 
 import person.prashant.qpid.publisher.OurMessagePublisher;
 import person.prashant.qpid.publisher.RandomStringMessageProducer;
-import person.prashant.qpid.publisher.own.ConnectionFactoryBasedMessagePublisher;
 
 public class Runner {
 
