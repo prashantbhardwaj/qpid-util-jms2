@@ -3,6 +3,7 @@ package person.prashant.qpid.publisher;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import person.prashant.qpid.BaseMessageProducer;
 
 import javax.jms.JMSException;
 import java.util.ArrayList;
@@ -10,40 +11,15 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class RandomStringMessageProducer implements OurMessageProducer {
+public class RandomStringMessageProducer extends BaseMessageProducer {
     private static final Logger LOGGER = LoggerFactory.getLogger(RandomStringMessageProducer.class);
-    private final OurMessagePublisher messagePublisher;
 
     public RandomStringMessageProducer(OurMessagePublisher messagePublisher) throws Exception {
-        this.messagePublisher = messagePublisher;
+        super(messagePublisher);
     }
 
-    public void publishFixedNumberOfMessages(long messageCount) throws JMSException {
-        LOGGER.info("Creating {} messages", messageCount);
-        List<String> messages = new ArrayList<>();
-        for(int i = 0; i < messageCount; i++){
-            messages.add(UUID.randomUUID().toString());
-        }
-        this.messagePublisher.publish(messages);
-    }
-
-    public void publishFixedNumberOfMessagesButTakeABreaksInBetween(long messageCount, int breakAfter) throws JMSException {
-        LOGGER.info("Creating {} messages", messageCount);
-        List<String> messages = new ArrayList<>();
-        for(int i = 0; i < messageCount; i++){
-            messages.add(UUID.randomUUID().toString());
-        }
-        this.messagePublisher.publish();
-    }
-
-    public void keepPublishingMessagesAfterProvidedMilliSeconds(int timeGapInMillis) throws JMSException {
-        while(this != null){
-            this.messagePublisher.publish(UUID.randomUUID().toString());
-            try {
-                TimeUnit.MILLISECONDS.sleep(timeGapInMillis);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+    @Override
+    protected String getMessage() {
+        return UUID.randomUUID().toString();
     }
 }
